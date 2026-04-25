@@ -4,7 +4,7 @@
   "description": "Telegram bot for downloading videos - Somalia",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+   "start": "pip install yt-dlp && node index.js",,
     "dev": "nodemon index.js"
   },
   "dependencies": {
