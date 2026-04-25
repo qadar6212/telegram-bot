@@ -1,0 +1,16 @@
+{
+  "name": "telegram-video-downloader-bot",
+  "version": "1.0.0",
+  "description": "Telegram bot for downloading videos - Somalia",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "node-telegram-bot-api": "^0.66.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.0"
+  }
+}
