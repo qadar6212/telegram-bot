@@ -8,6 +8,72 @@ const config = require("./config");
 const userManager = require("./userManager");
 const { getFormats, downloadVideo, deleteFile } = require("./downloader");
 const queue = require("./queue");
+const express = require("express");
+const path = require("path");
+
+// =============================================
+// EXPRESS SERVER - Admin Panel
+// =============================================
+const app = express();
+app.use(express.json());
+
+// Serve admin panel
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "admin.html"));
+});
+
+// API: Get all users + stats
+app.get("/api/users", (req, res) => {
+  const users = userManager.getAllUsers();
+  const premium = users.filter((u) => userManager.isPremiumActive(u)).length;
+  const totalDownloads = users.reduce((s, u) => s + (u.totalDownloads || 0), 0);
+  res.json({ users, total: users.length, premium, totalDownloads });
+});
+
+// API: Approve premium
+app.post("/api/approve", (req, res) => {
+  const { userId, days } = req.body;
+  const success = userManager.approvePremium(userId, days || 30);
+  if (success) {
+    bot.sendMessage(userId, `🎉 *Premium-kaaga waa la xaqiijiyay!*\n\n⭐ ${days} maalmood oo premium ah.\nEnjoy garee! 🚀`, { parse_mode: "Markdown" }).catch(() => {});
+    res.json({ ok: true, message: `User ${userId} approved ${days} days` });
+  } else {
+    res.json({ ok: false, error: "User lama helin" });
+  }
+});
+
+// API: Revoke premium
+app.post("/api/revoke", (req, res) => {
+  const { userId } = req.body;
+  userManager.revokePremium(userId);
+  bot.sendMessage(userId, "❌ Premium-kaaga waa la joojiyay.").catch(() => {});
+  res.json({ ok: true, message: `User ${userId} revoked` });
+});
+
+// API: Ban user
+app.post("/api/ban", (req, res) => {
+  const { userId } = req.body;
+  userManager.banUser(userId);
+  res.json({ ok: true, message: `User ${userId} banned` });
+});
+
+// API: Broadcast
+app.post("/api/broadcast", async (req, res) => {
+  const { message } = req.body;
+  const users = userManager.getAllUsers();
+  let sent = 0;
+  for (const user of users) {
+    try {
+      await bot.sendMessage(user.id, `📢 *Xaaladda Admin:*\n\n${message}`, { parse_mode: "Markdown" });
+      sent++;
+      await new Promise(r => setTimeout(r, 50));
+    } catch {}
+  }
+  res.json({ ok: true, message: `Waa la diray ${sent}/${users.length} users` });
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`✅ Admin panel: http://localhost:${PORT}`));
 
 // Initialize bot
 const bot = new TelegramBot(config.BOT_TOKEN, { polling: true });
