@@ -5,7 +5,7 @@
 
 module.exports = {
   // TOKEN-KA TELEGRAM BOT-KAAGA - ka hel @BotFather
-BOT_TOKEN: "8616440846:AAGsILqthEutJepwZI0f3YQo3exwXOTFUn0",
+BOT_TOKEN: "8616440846:AAGsaEK0ZXsUcu3TIJ5d9ndATiiL5anIagE",
 
   // ADMIN ID - ID-gaaga Telegram (hel @userinfobot)
   ADMIN_ID: 123456789,
