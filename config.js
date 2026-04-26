@@ -8,7 +8,7 @@ module.exports = {
 BOT_TOKEN: "8616440846:AAGsaEK0ZXsUcu3TIJ5d9ndATiiL5anIagE",
 
   // ADMIN ID - ID-gaaga Telegram (hel @userinfobot)
-  ADMIN_ID: 123456789,
+ ADMIN_ID: 8616440846,
 
   // Free user limits
   FREE_DAILY_LIMIT: 5,          // downloads maalintii
